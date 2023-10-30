@@ -6,6 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getCookie(name: string) {
+  if (typeof window === "undefined") {
+    return null;
+  }
   function escape(s: string) {
     return s.replace(/([.*+?\^$(){}|\[\]\/\\])/g, "\\$1");
   }

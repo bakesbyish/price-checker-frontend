@@ -53,6 +53,8 @@ export default function Home() {
 
   useEffect(() => {
     getRecords(value);
+
+    // eslint-disable-next-line
   }, [value]);
 
   return (
