@@ -1,41 +1,15 @@
 "use client";
 import { useMutation } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
-import { getRequestMeta } from "next/dist/server/request-meta";
 import { useCallback, useEffect, useState } from "react";
 import { Icons } from "~/components/ui/icons";
 import { Input } from "~/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
-import { productsAPI } from "~/lib/api";
-import { Record } from "~/types/records";
+import { search } from "~/server/algolia";
 
 export default function Home() {
   const { data: data, mutateAsync: fetchRecords, status, reset } = useMutation({
-    mutationFn: async (query: string) => {
-      try {
-        const res = await productsAPI.post<{
-          status: string;
-          records?: Record[] | undefined;
-        }>("/search", {
-          "query": query,
-        });
-
-        if (res.data.records === undefined || !Array.isArray(res.data.records)) {
-          return {
-            records: [],
-          };
-        }
-
-        return {
-          records: res.data.records,
-        };
-      } catch (error) {
-        console.error(error);
-        return {
-          records: [],
-        };
-      }
-    },
+    mutationFn: search,
   });
   const [value, setValue] = useState("");
 
@@ -86,7 +60,7 @@ export default function Home() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {data.records.map((record, n) => (
+                      {data.map((record, n) => (
                         <TableRow key={n}>
                           <TableCell>{record.objectID}</TableCell>
                           <TableCell>{record.Name}</TableCell>
