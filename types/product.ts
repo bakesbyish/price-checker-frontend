@@ -1,10 +1,7 @@
 export type Product = {
-  Name: string;
-  Code: string;
-  PLU: string;
-  MeasurementUnit: string;
-  Description: string;
-  ID: number;
-  Price: number;
-  Cost: number;
+  item_id: string;
+  name: string;
+  cost_price: string;
+  unit_price: string;
+  description: string;
 };
