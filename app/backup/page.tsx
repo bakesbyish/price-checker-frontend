@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 export default async function Backup() {
-  await fetch("http://localhost:3000/api/backup", {
+  await fetch(`${process.env.DOMAIN}/api/backup`, {
     method: "POST",
     body: JSON.stringify({
       "products": [],
