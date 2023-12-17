@@ -15,3 +15,8 @@ export function getCookieInBrowser(name: string) {
   var match = document.cookie.match(RegExp("(?:^|;\\s*)" + escape(name) + "=([^;]*)"));
   return match ? match[1] : null;
 }
+
+export function getCookieInServer(cookieStr: string, cookieName: string): string | null {
+  const match = cookieStr.match(new RegExp(cookieName + "=([^;]+)"));
+  return match ? match[1] : null;
+}
