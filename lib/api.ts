@@ -1,7 +1,7 @@
 import axios from "axios";
-import { getCookie } from "./utils";
+import { getCookieInBrowser } from "./utils";
 
-const baseURL = `http://${getCookie("ip")}:8080`;
+const baseURL = `http://${getCookieInBrowser("ip")}:8080`;
 
 export const productsAPI = axios.create({
   baseURL: `${baseURL}/algolia/products`,

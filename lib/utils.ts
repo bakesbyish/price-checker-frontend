@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getCookie(name: string) {
+export function getCookieInBrowser(name: string) {
   if (typeof window === "undefined") {
     return null;
   }
