@@ -5,5 +5,8 @@ declare namespace NodeJS {
     ALGOLIA_ID: string;
     ALGOLIA_WRITE_KEY: string;
     ALGOLIA_INDEX_NAME: string;
+    DOMAIN: string;
+    POS_USERNAME: string;
+    POS_PASSWORD: string;
   }
 }
