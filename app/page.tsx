@@ -1,13 +1,17 @@
 "use client";
 import { useMutation } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { GrUpdate } from "react-icons/gr";
+import { Button } from "~/components/ui/button";
 import { Icons } from "~/components/ui/icons";
 import { Input } from "~/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
 import { search } from "~/server/algolia";
 
 export default function Home() {
+  const router = useRouter();
   const { data: data, mutateAsync: fetchRecords, status, reset } = useMutation({
     mutationFn: search,
   });
@@ -34,12 +38,19 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center  min-h-screen mt-10">
       <div className="flex flex-col items-center justify-center max-w-xl w-full">
-        <Input
-          className="w-72 sm:w-96"
-          placeholder="search by Name or SKU ... "
-          value={value}
-          onChange={(event) => setValue(event.currentTarget.value)}
-        />
+        <section className="flex items-center justify-center w-full gap-2">
+          <Input
+            className="w-72 sm:w-96"
+            placeholder="search by Name or SKU ... "
+            value={value}
+            onChange={(event) => setValue(event.currentTarget.value)}
+          />
+          <Button
+            onClick={() => router.push("/backup")}
+          >
+            <GrUpdate />
+          </Button>
+        </section>
 
         <div className="w-72 sm:w-full mt-12">
           {status === "pending"
