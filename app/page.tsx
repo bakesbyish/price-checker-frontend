@@ -45,11 +45,6 @@ export default function Home() {
             value={value}
             onChange={(event) => setValue(event.currentTarget.value)}
           />
-          <Button
-            onClick={() => router.push("/backup")}
-          >
-            <GrUpdate />
-          </Button>
         </section>
 
         <div className="w-72 sm:w-full mt-12">
