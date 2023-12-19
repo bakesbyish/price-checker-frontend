@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { IoClipboardOutline } from "react-icons/io5";
 import { Icons } from "~/components/ui/icons";
 import { Input } from "~/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
@@ -66,7 +67,12 @@ export default function Home() {
                     <TableBody>
                       {data.map((record, n) => (
                         <TableRow key={n}>
-                          <TableCell>{record.objectID}</TableCell>
+                          <TableCell
+                            className="hover:bg-slate-100"
+                            onClick={() => navigator.clipboard.writeText(record.ID)}
+                          >
+                            {record.objectID}
+                          </TableCell>
                           <TableCell>{record.Name}</TableCell>
                           <TableCell>{record.Price}</TableCell>
                         </TableRow>
