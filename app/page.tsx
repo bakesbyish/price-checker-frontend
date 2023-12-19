@@ -43,6 +43,15 @@ export default function Home() {
             placeholder="search by Name or SKU ... "
             value={value}
             onChange={(event) => setValue(event.currentTarget.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                if (status === "pending" || !data) {
+                  return;
+                }
+
+                navigator.clipboard.writeText(data[0].ID);
+              }
+            }}
           />
         </section>
 
