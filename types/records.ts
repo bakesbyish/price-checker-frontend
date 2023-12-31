@@ -4,5 +4,6 @@ export type Record = {
   Description: string;
   ID: string;
   Price: string;
+  Quantity: string;
   Cost: string;
 };

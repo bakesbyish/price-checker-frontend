@@ -2,8 +2,7 @@
 import { useMutation } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { IoClipboardOutline } from "react-icons/io5";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Icons } from "~/components/ui/icons";
 import { Input } from "~/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
@@ -11,10 +10,13 @@ import { search } from "~/server/algolia";
 
 export default function Home() {
   const router = useRouter();
-  const { data: data, mutateAsync: fetchRecords, status, reset } = useMutation({
+  const { data, mutateAsync: fetchRecords, status, reset } = useMutation({
     mutationFn: search,
   });
   const [value, setValue] = useState("");
+
+  const tableRef = useRef<HTMLTableSectionElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const getRecords = useCallback(
     debounce(async (query: string) => {
@@ -28,17 +30,21 @@ export default function Home() {
     [],
   );
 
+  useEffect(() => inputRef.current?.focus(), [])
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     getRecords(value);
-
-    // eslint-disable-next-line
   }, [value]);
 
   return (
-    <main className="flex flex-col items-center  min-h-screen mt-10">
+    <main
+      className="flex flex-col items-center  min-h-screen mt-10"
+    >
       <div className="flex flex-col items-center justify-center max-w-xl w-full">
         <section className="flex items-center justify-center w-full gap-2">
           <Input
+            ref={inputRef}
             className="w-72 sm:w-96"
             placeholder="search by Name or SKU ... "
             value={value}
@@ -49,7 +55,7 @@ export default function Home() {
                   return;
                 }
 
-                navigator.clipboard.writeText(data[0].ID);
+                navigator.clipboard.writeText(data[0].objectID);
               }
             }}
           />
@@ -65,25 +71,69 @@ export default function Home() {
             : (
               <>
                 {data && (
-                  <Table>
+                  <Table
+                    className="w-full"
+                  >
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="w-[100px]">SKU</TableHead>
-                        <TableHead>Name</TableHead>
+                        <TableHead className="">SKU</TableHead>
+                        <TableHead className="w-16 sm:w-full truncate">Name</TableHead>
                         <TableHead>Price</TableHead>
+                        <TableHead>Quantity</TableHead>
+                        <TableHead>Cost</TableHead>
                       </TableRow>
                     </TableHeader>
-                    <TableBody>
-                      {data.map((record, n) => (
-                        <TableRow key={n}>
+                    <TableBody
+                      ref={tableRef}
+                    >
+                      {data.map((record) => (
+                        <TableRow
+                          id={record.objectID}
+                          key={record.objectID}
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            e.stopPropagation()
+                            const currentRow = tableRef.current?.children.namedItem(record.objectID)
+                            switch (e.key) {
+                              case "Enter":
+                                navigator.clipboard.writeText(record.objectID)
+                                break;
+                              case "ArrowUp":
+                                // @ts-ignore
+                                currentRow?.previousElementSibling?.focus()
+                                break;
+                              case "ArrowDown":
+                                // @ts-ignore
+                                currentRow?.nextElementSibling?.focus();
+                                break;
+                              case "Backspace":
+                                setValue("")
+                                inputRef.current?.focus()
+                                break;
+                            }
+                          }}
+                        >
                           <TableCell
-                            className="hover:bg-slate-100"
-                            onClick={() => navigator.clipboard.writeText(record.ID)}
+                            className="hover:bg-slate-100 cursor-pointer"
+                            onClick={() => navigator.clipboard.writeText(record.objectID)}
                           >
-                            {record.objectID}
+                            {record.ID}
                           </TableCell>
-                          <TableCell>{record.Name}</TableCell>
+                          <TableCell
+                            className="hover:bg-slate-100 cursor-pointer"
+                            onClick={() => navigator.clipboard.writeText(record.Name)}
+                          >
+                            {record.Name}
+                          </TableCell>
                           <TableCell>{record.Price}</TableCell>
+                          <TableCell
+                            onClick={() => alert("Hello world")}
+                          >
+                            {record.Quantity}
+                          </TableCell>
+                          <TableCell>
+                            {record.Cost}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
