@@ -1,7 +1,6 @@
 "use client";
 import { useMutation } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Icons } from "~/components/ui/icons";
 import { Input } from "~/components/ui/input";
@@ -9,7 +8,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~
 import { search } from "~/server/algolia";
 
 export default function Home() {
-  const router = useRouter();
   const { data, mutateAsync: fetchRecords, status, reset } = useMutation({
     mutationFn: search,
   });
@@ -127,7 +125,6 @@ export default function Home() {
                           </TableCell>
                           <TableCell>{record.Price}</TableCell>
                           <TableCell
-                            onClick={() => alert("Hello world")}
                           >
                             {record.Quantity}
                           </TableCell>
