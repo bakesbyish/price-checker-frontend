@@ -14,7 +14,16 @@ const keys = [
   env.POS_API_KEY_4,
 ]
 
+type R = {
+  status: "pending" | "processing" | "success" | "failed"
+  nextPage: number
+}
+
 export async function GET(req: NextRequest) {
+  const response: R = {
+    status: "success",
+    nextPage: -1
+  }
   const searchParams = req.nextUrl.searchParams;
 
   let offset = parseInt(searchParams.get("offset") ?? "0")
@@ -48,10 +57,9 @@ export async function GET(req: NextRequest) {
   })
   if (!res.ok) {
     console.log(await res.json())
-    return Response.json({
-      status: "Failed to fetch products",
-      nextPage: offset,
-    })
+    response.status = "failed"
+    response.nextPage = offset
+    return Response.json(response)
   }
   const payload = <Item[]>(await res.json())
 
@@ -59,10 +67,9 @@ export async function GET(req: NextRequest) {
     ZodItem.array().parse(payload)
   } catch (error) {
     console.error(error)
-    return Response.json({
-      status: "Internal server error",
-      nextPage: offset,
-    })
+    response.status = "failed"
+    response.nextPage = offset
+    return Response.json(response)
   }
 
   const records: Record[] = [];
@@ -92,14 +99,12 @@ export async function GET(req: NextRequest) {
     await saveRecords(records)
   } catch (error) {
     console.error(error)
-    return Response.json({
-      status: "Failed to save products",
-      nextPage: offset,
-    })
+    response.status = "failed"
+    response.nextPage = offset
+    return Response.json(response)
   }
 
-  return Response.json({
-    status: "Okay",
-    nextPage: newOffset,
-  })
+  response.status = "success"
+  response.nextPage = newOffset;
+  return Response.json(response)
 }
