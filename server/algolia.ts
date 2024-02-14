@@ -1,5 +1,5 @@
-import "server-only";
 "use server";
+import "server-only";
 
 import algoliasearch from "algoliasearch";
 import { env } from "~/env";
