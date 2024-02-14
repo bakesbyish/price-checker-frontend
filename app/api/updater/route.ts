@@ -57,7 +57,6 @@ export async function GET(req: NextRequest) {
     }
   })
   if (!res.ok) {
-    console.log(await res.json())
     response.status = "failed"
     response.nextPage = offset
     response.message = "Failed to fetch products from POS software (Check logs for more information)"
@@ -110,6 +109,8 @@ export async function GET(req: NextRequest) {
 
   response.status = "success"
   response.nextPage = newOffset;
-  response.message = `Saved from ${offset} to ${newOffset}. Saving ${records.length} from the limit of ${limit}`
+  if (newOffset === -1) response.message = `Saved from ${offset} to ${offset + limit}. Saving ${records.length} from the limit of ${limit}`
+  else response.message = `Saved from ${offset} to ${newOffset}. Saving ${records.length} from the limit of ${limit}`
+
   return Response.json(response)
 }
