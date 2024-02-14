@@ -15,7 +15,7 @@
     "@types/lodash.debounce": "^4.0.8",
     "@upstash/redis": "^1.24.2",
     "algoliasearch": "^4.20.0",
-    "axios": "^1.6.0",
+    "axios": "^1.6.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "jiti": "^1.21.0",
