@@ -16,13 +16,14 @@ const keys = [
 
 type R = {
   status: "pending" | "processing" | "success" | "failed"
+  message: string;
   nextPage: number
 }
 
 export async function GET(req: NextRequest) {
   const response: R = {
     status: "success",
-    nextPage: -1
+    nextPage: -1,
   }
   const searchParams = req.nextUrl.searchParams;
 
@@ -59,6 +60,7 @@ export async function GET(req: NextRequest) {
     console.log(await res.json())
     response.status = "failed"
     response.nextPage = offset
+    response.message = "Failed to fetch products from POS software (Check logs for more information)"
     return Response.json(response)
   }
   const payload = <Item[]>(await res.json())
@@ -69,6 +71,7 @@ export async function GET(req: NextRequest) {
     console.error(error)
     response.status = "failed"
     response.nextPage = offset
+    response.message = "Unrecognized data format received from the server"
     return Response.json(response)
   }
 
@@ -101,10 +104,12 @@ export async function GET(req: NextRequest) {
     console.error(error)
     response.status = "failed"
     response.nextPage = offset
+    response.message = "Failed to save the records in Algolia"
     return Response.json(response)
   }
 
   response.status = "success"
   response.nextPage = newOffset;
+  response.message = `Saved from ${offset} to ${newOffset}. Saving ${records.length} from the limit of ${limit}`
   return Response.json(response)
 }
