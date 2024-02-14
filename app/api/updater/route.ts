@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
   const response: R = {
     status: "success",
     nextPage: -1,
+    message: ""
   }
   const searchParams = req.nextUrl.searchParams;
 
