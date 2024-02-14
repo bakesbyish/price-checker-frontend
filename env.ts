@@ -13,6 +13,7 @@ export const env = createEnv({
     POS_API_KEY_2: z.string().min(1),
     POS_API_KEY_3: z.string().min(1),
     POS_API_KEY_4: z.string().min(1),
+    POS_API_KEY_5: z.string().min(1),
   },
   client: {
   },
