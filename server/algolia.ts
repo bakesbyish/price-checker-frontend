@@ -11,3 +11,10 @@ export async function search(key: string): Promise<Record[]> {
   const res = await index.search(key);
   return res.hits as unknown as Record[];
 }
+
+export async function saveRecords(records: Record[]) {
+  const client = algoliasearch(env.ALGOLIA_ID, env.ALGOLIA_WRITE_KEY);
+  const index = client.initIndex(env.ALGOLIA_INDEX_NAME);
+
+  await index.saveObjects(records)
+}
