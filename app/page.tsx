@@ -1,8 +1,10 @@
 "use client";
 import { useMutation } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { search } from "~/client/algolia";
+import { Button } from "~/components/ui/button";
 import { Icons } from "~/components/ui/icons";
 import { Input } from "~/components/ui/input";
 import {
@@ -49,6 +51,14 @@ export default function Home() {
 
 	return (
 		<main className="flex flex-col items-center  min-h-screen mt-10">
+			<section className="bottom-0 fixed bg-white/70 p-1 text-sm font-semibold text-black backdrop-blur-lg dark:bg-black/70 dark:text-white w-full">
+				<Link
+					className="inline-flex bg-pink-500 p-2 text-white rounded-md"
+					href={"/update"}
+				>
+					Update
+				</Link>
+			</section>
 			<div className="flex flex-col items-center justify-center max-w-xl w-full">
 				<section className="flex items-center justify-center w-full gap-2">
 					<Input
